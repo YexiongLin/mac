@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Model-Aligned Coupling for Flow Matching">
+  <meta name="keywords" content="Diffusion, Flow Matching, Optimal Transport">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beyond Optimal Transport: Model-Aligned Coupling for Flow Matching</title>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div style="display: flex; align-items: up;">
+            <div>
+              <h1 class="title is-2 publication-title" style="margin: 0;">Beyond Optimal Transport: Model-Aligned Coupling for Flow Matching</h1>
+            </div>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://yexionglin.github.io">Yexiong Lin</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://a5507203.github.io">Yu Yao</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://tongliang-liu.github.io">Tongliang Liu</a>*
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block" style="color:#808080;font-weight:normal;">
+              Sydney AI Centre, The University of Sydney &nbsp&nbsp 
+              * Corresponding Author
+            </span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Coming Soon)</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./static/images/intro.jpg" alt="MAC results" width="100%">
+      <h2 class="subtitle has-text-centered" style="font-family: 'Google Sans', sans-serif; line-height: 1.6; color: #4a4a4a; font-size: 1.25rem; margin: 1.5rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <strong style="color: #363636;">MAC</strong> can select model-aligned couplings and yields significantly better sample quality with fewer integration steps compared to other methods.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0rem;">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          Flow Matching (FM) is an effective framework for training a model to learn a vector field that transports samples from a source distribution to a target distribution. To train the model, early FM methods use random couplings, which often result in crossing paths and lead the model to learn non-straight trajectories that require many integration steps to generate high-quality samples. To address this, recent methods adopt Optimal Transport (OT) to construct couplings by minimizing geometric distances, which helps reduce path crossings.
+However, we observe that such geometry-based couplings do not necessarily align with the model's preferred trajectories, making it difficult to learn the vector field induced by these couplings, which prevents the model from learning straight trajectories. Motivated by this, we propose Model-Aligned Coupling (MAC), an effective method that matches training couplings based not only on geometric distance but also on alignment with the model's preferred transport directions based on its prediction error.
+To avoid the time-costly match process, MAC proposes to select the top-\( k \) fraction of couplings with the lowest error for training.
+Extensive experiments show that MAC significantly improves generation quality and efficiency in few-step settings compared to existing methods.
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+</section>
+
+<section class="section" style="padding-top: 0rem;">
+  <div class="container is-max-desktop">
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+          <p>The goal of <strong>Model-Aligned Coupling (MAC)</strong> is to construct couplings that are better aligned with the model's current ability to fit the data. Specifically, we aim to prioritize couplings \( (x_0, x_1) \) that have lower prediction error under the current vector field \( v_\theta \). To measure whether the model can fit the data well, we employ the pairwise prediction error, defined as:</p>
+
+          <p>
+          \[
+          \mathcal{L}_{\mathrm{pair}}(x_0, x_1) := \mathbb{E}_{t \sim \mathcal{U}[0,1]} \left[ \left\| v_\theta((1 - t)x_0 + t x_1, t) - (x_1 - x_0) \right\|^2 \right]
+          \]
+          </p>
+
+          <p>Our objective is to find a coupling \( \tilde{\rho}(x_0, x_1) \in \mathcal{C}(p_0, p_1) \) that minimizes the expected prediction error:</p>
+
+          <p>
+          \[
+          \tilde{\rho} = \arg\min_{\rho \in \mathcal{C}(p_0, p_1)} \, \mathbb{E}_{(x_0, x_1) \sim \rho} \left[ \mathcal{L}_{\mathrm{pair}}(x_0, x_1) \right]
+          \]
+          </p>
+
+          <p>where \( \mathcal{C}(p_0, p_1) \) denotes the set of admissible couplings with fixed marginals.</p>
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0rem;">
+  <div class="container is-max-desktop">
+    <!-- Results. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Results</h2>
+      </div>
+    </div>
+    <div class="column is-full-width">
+      <h2 class="title is-4">Quantitative Results</h2>
+      <img src="./static/images/results.jpg" alt="MAC Results" width="100%">
+    </div>
+
+    <div class="column is-full-width">
+      <h2 class="title is-4">Qualitative Results on Celeba-HQ-256</h2>
+      <img src="./static/images/celeba.jpg" alt="MAC Results" width="100%">
+    </div>
+    <!--/ Results. -->
+</section>
+
+
+<!-- <section class="section" id="BibTeX", style="padding-top: 0rem;">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+      @article{xxx,
+      }
+  </code></pre>
+  </div>
+</section> -->
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            The website template is borrowed from the source code of <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
